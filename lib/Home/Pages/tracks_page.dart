@@ -90,10 +90,9 @@ class TracksPageState extends State<TracksPage>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
-  void changeSong(image, song) async {
+  static void changeSong(image, song) async {
     HomeBlocProvider.bloc.changeSongColorDetails(CompleteSongModel(song: song));
     await PaletteGenerator.fromImageProvider(AssetImage(image))
         .then((_paletteGenerator) {

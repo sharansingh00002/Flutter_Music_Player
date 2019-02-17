@@ -8,14 +8,17 @@ class StaticFiles {
   static bool isSongBeingPlayed = false;
   static Color bgColor = Colors.black;
   static playMusic() {
+    isSongBeingPlayed = true;
     audioPlayer.play(songsList[currentMusicFileSelectedIndex].uri);
   }
 
   static pauseMusic() {
+    isSongBeingPlayed = false;
     audioPlayer.pause();
   }
 
   static stopMusic() {
+    isSongBeingPlayed = false;
     audioPlayer.stop();
   }
 }

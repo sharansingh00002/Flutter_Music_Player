@@ -7,4 +7,8 @@ class HomeBlocProvider {
   Function get changeSongColorDetails => _songColorBloc.sink.add;
 
   Stream get songColorStream => _songColorBloc.stream;
+
+  void dispose() {
+    _songColorBloc.close();
+  }
 }
