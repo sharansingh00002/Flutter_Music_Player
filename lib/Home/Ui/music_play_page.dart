@@ -128,8 +128,12 @@ class MusicPlayPageState extends State<MusicPlayPage> {
     if (StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex] ==
         null) StaticFiles.currentMusicFileSelectedIndex = 0;
     TracksPageState.changeSong(
-        StaticFiles
-            .songsList[StaticFiles.currentMusicFileSelectedIndex].albumArt,
+        (StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex]
+                    .albumArt !=
+                null)
+            ? StaticFiles
+                .songsList[StaticFiles.currentMusicFileSelectedIndex].albumArt
+            : "",
         StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex]);
     StaticFiles.playMusic();
   }
@@ -140,8 +144,12 @@ class MusicPlayPageState extends State<MusicPlayPage> {
     if (StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex] ==
         null) StaticFiles.currentMusicFileSelectedIndex = 0;
     TracksPageState.changeSong(
-        StaticFiles
-            .songsList[StaticFiles.currentMusicFileSelectedIndex].albumArt,
+        (StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex]
+                    .albumArt !=
+                null)
+            ? StaticFiles
+                .songsList[StaticFiles.currentMusicFileSelectedIndex].albumArt
+            : "",
         StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex]);
     StaticFiles.playMusic();
   }
