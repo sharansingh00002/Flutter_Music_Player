@@ -18,11 +18,7 @@ class TracksPageState extends State<TracksPage>
       setState(() {
         StaticFiles.songsList = value;
       });
-      changeSong(
-          (StaticFiles.songsList[0].albumArt != null)
-              ? StaticFiles.songsList[0].albumArt
-              : "",
-          StaticFiles.songsList[0]);
+      changeSong(StaticFiles.songsList[0].albumArt, StaticFiles.songsList[0]);
       print(StaticFiles.songsList.length);
     }).catchError((e) {
       print('exception caught $e');
@@ -72,13 +68,11 @@ class TracksPageState extends State<TracksPage>
                                 StaticFiles.stopMusic();
                                 StaticFiles.playMusic();
                                 StaticFiles.isSongBeingPlayed = true;
-//                                HomeBlocProvider.bloc
-//                                    .changeSong(StaticFiles.songsList[index]);
                                 changeSong(
                                     (StaticFiles.songsList[index].albumArt !=
                                             null)
                                         ? StaticFiles.songsList[index].albumArt
-                                        : "",
+                                        : Colors.black,
                                     StaticFiles.songsList[index]);
                               });
                             },
@@ -95,20 +89,15 @@ class TracksPageState extends State<TracksPage>
 
   @override
   bool get wantKeepAlive => true;
+}
 
-  static void changeSong(image, song) async {
-    HomeBlocProvider.bloc.changeSongColorDetails(CompleteSongModel(song: song));
-    if (image != "")
-      await PaletteGenerator.fromImageProvider(AssetImage(image))
-          .then((_paletteGenerator) {
-        HomeBlocProvider.bloc.changeSongColorDetails(CompleteSongModel(
-            backgroundColor: _paletteGenerator.dominantColor.color,
-            textColor: _paletteGenerator.dominantColor.bodyTextColor,
-            song: song));
-      });
-    else {
-      HomeBlocProvider.bloc.changeSongColorDetails(CompleteSongModel(
-          backgroundColor: Colors.black, textColor: Colors.white, song: song));
-    }
-  }
+void changeSong(image, song) async {
+  HomeBlocProvider.bloc.changeSongColorDetails(CompleteSongModel(song: song));
+  await PaletteGenerator.fromImageProvider(AssetImage(image))
+      .then((_paletteGenerator) {
+    HomeBlocProvider.bloc.changeSongColorDetails(CompleteSongModel(
+        backgroundColor: _paletteGenerator.dominantColor.color,
+        textColor: _paletteGenerator.dominantColor.bodyTextColor,
+        song: song));
+  });
 }
