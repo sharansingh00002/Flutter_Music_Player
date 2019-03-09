@@ -29,6 +29,9 @@ class HomePageState extends State<HomePage> {
 //      theme: ThemeData.dark(),
       home: Scaffold(
         key: _scaffoldKey,
+        drawer: Drawer(
+          child: homeNavigationDrawer(),
+        ),
         appBar: AppBar(
             title: Padding(
           padding: const EdgeInsets.only(left: 32.0),
@@ -37,9 +40,6 @@ class HomePageState extends State<HomePage> {
             style: TextStyle(fontSize: 16.0),
           ),
         )),
-        drawer: Drawer(
-          child: homeNavigationDrawer(),
-        ),
         body: Stack(
           children: <Widget>[
             PageView(
