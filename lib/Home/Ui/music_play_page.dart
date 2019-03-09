@@ -14,7 +14,6 @@ class MusicPlayPageState extends State<MusicPlayPage> {
   PaletteGenerator paletteGenerator;
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return StreamBuilder(
       stream: HomeBlocProvider.bloc.songColorStream,
       builder: (context, snapshot) {
@@ -127,7 +126,7 @@ class MusicPlayPageState extends State<MusicPlayPage> {
     StaticFiles.currentMusicFileSelectedIndex--;
     if (StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex] ==
         null) StaticFiles.currentMusicFileSelectedIndex = 0;
-    TracksPageState.changeSong(
+    changeSong(
         StaticFiles
             .songsList[StaticFiles.currentMusicFileSelectedIndex].albumArt,
         StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex]);
@@ -139,7 +138,7 @@ class MusicPlayPageState extends State<MusicPlayPage> {
     StaticFiles.currentMusicFileSelectedIndex++;
     if (StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex] ==
         null) StaticFiles.currentMusicFileSelectedIndex = 0;
-    TracksPageState.changeSong(
+    changeSong(
         StaticFiles
             .songsList[StaticFiles.currentMusicFileSelectedIndex].albumArt,
         StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex]);

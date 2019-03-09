@@ -68,8 +68,6 @@ class TracksPageState extends State<TracksPage>
                                 StaticFiles.stopMusic();
                                 StaticFiles.playMusic();
                                 StaticFiles.isSongBeingPlayed = true;
-//                                HomeBlocProvider.bloc
-//                                    .changeSong(StaticFiles.songsList[index]);
                                 changeSong(
                                     (StaticFiles.songsList[index].albumArt !=
                                             null)
@@ -91,15 +89,15 @@ class TracksPageState extends State<TracksPage>
 
   @override
   bool get wantKeepAlive => true;
+}
 
-  static void changeSong(image, song) async {
-    HomeBlocProvider.bloc.changeSongColorDetails(CompleteSongModel(song: song));
-    await PaletteGenerator.fromImageProvider(AssetImage(image))
-        .then((_paletteGenerator) {
-      HomeBlocProvider.bloc.changeSongColorDetails(CompleteSongModel(
-          backgroundColor: _paletteGenerator.dominantColor.color,
-          textColor: _paletteGenerator.dominantColor.bodyTextColor,
-          song: song));
-    });
-  }
+void changeSong(image, song) async {
+  HomeBlocProvider.bloc.changeSongColorDetails(CompleteSongModel(song: song));
+  await PaletteGenerator.fromImageProvider(AssetImage(image))
+      .then((_paletteGenerator) {
+    HomeBlocProvider.bloc.changeSongColorDetails(CompleteSongModel(
+        backgroundColor: _paletteGenerator.dominantColor.color,
+        textColor: _paletteGenerator.dominantColor.bodyTextColor,
+        song: song));
+  });
 }
