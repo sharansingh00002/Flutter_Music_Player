@@ -88,15 +88,15 @@ class MusicPlayPageState extends State<MusicPlayPage> {
                                 },
                               ),
                               IconButton(
-                                  icon: (StaticFiles.isSongBeingPlayed)
+                                  icon: (MusicRepo.isSongBeingPlayed)
                                       ? Icon(Icons.pause)
                                       : Icon(Icons.play_arrow),
                                   onPressed: () {
                                     setState(() {
-                                      if (StaticFiles.isSongBeingPlayed) {
-                                        StaticFiles.pauseMusic();
+                                      if (MusicRepo.isSongBeingPlayed) {
+                                        MusicRepo.pauseMusic();
                                       } else {
-                                        StaticFiles.playMusic();
+                                        MusicRepo.playMusic();
                                       }
                                     });
                                   }),
@@ -122,26 +122,24 @@ class MusicPlayPageState extends State<MusicPlayPage> {
   }
 
   void previousSong() {
-    StaticFiles.stopMusic();
-    StaticFiles.currentMusicFileSelectedIndex--;
-    if (StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex] ==
-        null) StaticFiles.currentMusicFileSelectedIndex = 0;
+    MusicRepo.stopMusic();
+    MusicRepo.currentMusicFileSelectedIndex--;
+    if (MusicRepo.songsList[MusicRepo.currentMusicFileSelectedIndex] == null)
+      MusicRepo.currentMusicFileSelectedIndex = 0;
     changeSong(
-        StaticFiles
-            .songsList[StaticFiles.currentMusicFileSelectedIndex].albumArt,
-        StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex]);
-    StaticFiles.playMusic();
+        MusicRepo.songsList[MusicRepo.currentMusicFileSelectedIndex].albumArt,
+        MusicRepo.songsList[MusicRepo.currentMusicFileSelectedIndex]);
+    MusicRepo.playMusic();
   }
 
   void nextSong() {
-    StaticFiles.stopMusic();
-    StaticFiles.currentMusicFileSelectedIndex++;
-    if (StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex] ==
-        null) StaticFiles.currentMusicFileSelectedIndex = 0;
+    MusicRepo.stopMusic();
+    MusicRepo.currentMusicFileSelectedIndex++;
+    if (MusicRepo.songsList[MusicRepo.currentMusicFileSelectedIndex] == null)
+      MusicRepo.currentMusicFileSelectedIndex = 0;
     changeSong(
-        StaticFiles
-            .songsList[StaticFiles.currentMusicFileSelectedIndex].albumArt,
-        StaticFiles.songsList[StaticFiles.currentMusicFileSelectedIndex]);
-    StaticFiles.playMusic();
+        MusicRepo.songsList[MusicRepo.currentMusicFileSelectedIndex].albumArt,
+        MusicRepo.songsList[MusicRepo.currentMusicFileSelectedIndex]);
+    MusicRepo.playMusic();
   }
 }
