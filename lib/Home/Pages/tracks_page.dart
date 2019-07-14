@@ -1,6 +1,7 @@
 import 'package:flute_music_player/flute_music_player.dart';
 import 'package:flutter/material.dart';
 import 'package:musicplayer/Home/bloc/home-page-bloc.dart';
+import 'package:musicplayer/Home/database/sql.dart';
 import 'package:musicplayer/Home/model/complete-song-model.dart';
 import 'package:musicplayer/Values/static_files.dart';
 import 'package:palette_generator/palette_generator.dart';
@@ -12,17 +13,34 @@ class TracksPage extends StatefulWidget {
 
 class TracksPageState extends State<TracksPage>
     with AutomaticKeepAliveClientMixin {
+  Sqlite _sqlite = Sqlite();
   getSongs() async {
-    StaticFiles.audioPlayer = new MusicFinder();
-    MusicFinder.allSongs().then((value) {
+    MusicRepo.audioPlayer = MusicFinder();
+    List<Song> songsList = List();
+    songsList = await _sqlite.getSongsFromDatabase();
+    if (songsList.length > 0) {
       setState(() {
-        StaticFiles.songsList = value;
+        MusicRepo.songsList = songsList;
+        changeSong(MusicRepo.songsList[0].albumArt, MusicRepo.songsList[0]);
       });
-      changeSong(StaticFiles.songsList[0].albumArt, StaticFiles.songsList[0]);
-      print(StaticFiles.songsList.length);
-    }).catchError((e) {
-      print('exception caught $e');
-    });
+    }
+    if (songsList == null || songsList.length == 0) {
+      MusicFinder.allSongs().then((value) {
+        List<Song> latestSongsList = value;
+        latestSongsList.removeWhere((song) => songsList.contains(song));
+        MusicRepo.songsList = (MusicRepo.songsList == null)
+            ? value
+            : (MusicRepo.songsList + (value ?? []));
+        latestSongsList = value;
+        _sqlite.insertSongsIntoDatabase(latestSongsList);
+        if (latestSongsList.length != songsList) {
+          setState(() {});
+        }
+        setState(() {});
+      }).catchError((e) {
+        print('exception caught $e');
+      });
+    }
   }
 
   @override
@@ -34,10 +52,10 @@ class TracksPageState extends State<TracksPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: (StaticFiles.songsList != null)
+        body: (MusicRepo.songsList != null)
             ? Scrollbar(
                 child: ListView.builder(
-                    itemCount: StaticFiles.songsList.length,
+                    itemCount: MusicRepo.songsList.length,
                     itemBuilder: (context, index) {
                       return Column(
                         children: <Widget>[
@@ -46,34 +64,32 @@ class TracksPageState extends State<TracksPage>
                               backgroundColor: Colors.pinkAccent,
                               radius: 24.0,
                               child: (Image.asset(
-                                          '${StaticFiles.songsList[index].albumArt}') !=
+                                          '${MusicRepo.songsList[index].albumArt}') !=
                                       null)
                                   ? ClipOval(
                                       child: SizedBox(
                                       height: 48,
                                       width: 48,
                                       child: Image.asset(
-                                        '${StaticFiles.songsList[index].albumArt}',
+                                        '${MusicRepo.songsList[index].albumArt}',
                                         fit: BoxFit.cover,
                                       ),
                                     ))
                                   : Container(),
                             ),
-                            title:
-                                Text('${StaticFiles.songsList[index].title}'),
+                            title: Text('${MusicRepo.songsList[index].title}'),
                             onTap: () {
                               setState(() {
-                                StaticFiles.currentMusicFileSelectedIndex =
-                                    index;
-                                StaticFiles.stopMusic();
-                                StaticFiles.playMusic();
-                                StaticFiles.isSongBeingPlayed = true;
+                                MusicRepo.currentMusicFileSelectedIndex = index;
+                                MusicRepo.stopMusic();
+                                MusicRepo.playMusic();
+                                MusicRepo.isSongBeingPlayed = true;
                                 changeSong(
-                                    (StaticFiles.songsList[index].albumArt !=
+                                    (MusicRepo.songsList[index].albumArt !=
                                             null)
-                                        ? StaticFiles.songsList[index].albumArt
+                                        ? MusicRepo.songsList[index].albumArt
                                         : Colors.black,
-                                    StaticFiles.songsList[index]);
+                                    MusicRepo.songsList[index]);
                               });
                             },
                           ),
@@ -83,7 +99,13 @@ class TracksPageState extends State<TracksPage>
                     }),
               )
             : Center(
-                child: Text('Loading...'),
+                child: SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
               ));
   }
 
@@ -93,7 +115,8 @@ class TracksPageState extends State<TracksPage>
 
 void changeSong(image, song) async {
   HomeBlocProvider.bloc.changeSongColorDetails(CompleteSongModel(song: song));
-  await PaletteGenerator.fromImageProvider(AssetImage(image))
+
+  PaletteGenerator.fromImageProvider(AssetImage(image))
       .then((_paletteGenerator) {
     HomeBlocProvider.bloc.changeSongColorDetails(CompleteSongModel(
         backgroundColor: _paletteGenerator.dominantColor.color,

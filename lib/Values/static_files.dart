@@ -1,7 +1,7 @@
 import 'package:flute_music_player/flute_music_player.dart';
 import 'package:flutter/material.dart';
 
-class StaticFiles {
+class MusicRepo {
   static List<Song> songsList;
   static int currentMusicFileSelectedIndex = 0;
   static MusicFinder audioPlayer;

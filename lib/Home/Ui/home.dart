@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:musicplayer/Home/Pages/albums_page.dart';
-import 'package:musicplayer/Home/Pages/artists_page.dart';
-import 'package:musicplayer/Home/Pages/genres_page.dart';
 import 'package:musicplayer/Home/Pages/tracks_page.dart';
 import 'package:musicplayer/Home/Ui/music_play_page.dart';
 import 'package:musicplayer/Home/bloc/home-page-bloc.dart';
@@ -26,12 +24,8 @@ class HomePageState extends State<HomePage> {
           primaryColor: Colors.black,
           accentColor: Colors.black54,
           brightness: Brightness.dark),
-//      theme: ThemeData.dark(),
       home: Scaffold(
         key: _scaffoldKey,
-        drawer: Drawer(
-          child: homeNavigationDrawer(),
-        ),
         appBar: AppBar(
             title: Padding(
           padding: const EdgeInsets.only(left: 32.0),
@@ -50,9 +44,7 @@ class HomePageState extends State<HomePage> {
               },
               children: <Widget>[
                 TracksPage(),
-                ArtistsPage(),
                 AlbumsPage(),
-                GenresPage(),
               ],
             ),
             Positioned(
@@ -71,7 +63,7 @@ class HomePageState extends State<HomePage> {
                     return AppBar(
                       backgroundColor:
                           (data != null) ? data.backgroundColor : Colors.black,
-                      leading: (StaticFiles.songsList != null)
+                      leading: (MusicRepo.songsList != null)
                           ? FittedBox(
                               fit: BoxFit.scaleDown,
                               child: ClipOval(
@@ -81,8 +73,7 @@ class HomePageState extends State<HomePage> {
                                       : Container(
                                           color: Colors.pink,
                                         )))
-                          : Icon(Icons
-                              .queue_music), //TODO put songs album pic here
+                          : Icon(Icons.queue_music),
                       title: Text(
                         (snapshot.hasData) ? data.song.title : '',
                         style: TextStyle(
@@ -92,7 +83,7 @@ class HomePageState extends State<HomePage> {
                       ),
                       actions: <Widget>[
                         IconButton(
-                          icon: (StaticFiles.isSongBeingPlayed)
+                          icon: (MusicRepo.isSongBeingPlayed)
                               ? IconButton(
                                   icon: Icon(
                                     Icons.pause,
@@ -102,10 +93,9 @@ class HomePageState extends State<HomePage> {
                                   ),
                                   onPressed: () {
                                     setState(() {
-                                      StaticFiles.isSongBeingPlayed = false;
+                                      MusicRepo.isSongBeingPlayed = false;
                                     });
-                                    //TODO implement song pause feature
-                                    StaticFiles.pauseMusic();
+                                    MusicRepo.pauseMusic();
                                   },
                                 )
                               : IconButton(
@@ -117,10 +107,9 @@ class HomePageState extends State<HomePage> {
                                   ),
                                   onPressed: () {
                                     setState(() {
-                                      StaticFiles.isSongBeingPlayed = true;
+                                      MusicRepo.isSongBeingPlayed = true;
                                     });
-                                    //TODO implement song play feature
-                                    StaticFiles.playMusic();
+                                    MusicRepo.playMusic();
                                   },
                                 ),
                         )
@@ -134,10 +123,6 @@ class HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }
-
-  Widget homeNavigationDrawer() {
-    return Column();
   }
 
   showBottomSheet() {

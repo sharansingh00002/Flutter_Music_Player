@@ -13,7 +13,7 @@ class AlbumSongsList extends StatefulWidget {
 class _AlbumSongsListState extends State<AlbumSongsList> {
   List<Song> songsList = List();
   getAlbumSongList() {
-    for (Song song in StaticFiles.songsList) {
+    for (Song song in MusicRepo.songsList) {
       if (song.albumId == widget.song.albumId ||
           song.album == widget.song.album) {
         songsList.add(song);
@@ -38,11 +38,11 @@ class _AlbumSongsListState extends State<AlbumSongsList> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                StaticFiles.currentMusicFileSelectedIndex =
-                    StaticFiles.songsList.indexOf(songsList[index]);
-                StaticFiles.stopMusic();
-                StaticFiles.playMusic();
-                StaticFiles.isSongBeingPlayed = true;
+                MusicRepo.currentMusicFileSelectedIndex =
+                    MusicRepo.songsList.indexOf(songsList[index]);
+                MusicRepo.stopMusic();
+                MusicRepo.playMusic();
+                MusicRepo.isSongBeingPlayed = true;
                 changeSong(
                     (songsList[index].albumArt != null)
                         ? songsList[index].albumArt
